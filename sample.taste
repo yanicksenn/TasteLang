@@ -1,0 +1,7 @@
+namespace taste.lang;
+
+type MyType {
+    string name;
+    int counter;
+    bool is_active;
+}
