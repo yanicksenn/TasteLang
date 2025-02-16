@@ -1,0 +1,6 @@
+# MacOSx
+.DS_Store
+
+# Bazel
+bazel-*
+
