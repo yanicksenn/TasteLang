@@ -24,7 +24,7 @@ type Token {
 	if err != nil {
 		t.Fatalf("%w", err)
 	}
-	expectedFile := shared.File{
+	expectedFile := &shared.File{
 		Namespace: "Tokenizer.Test",
 		Types: []shared.Type{
 			{
@@ -45,7 +45,7 @@ type Token {
 		},
 
 	}
-	if reflect.DeepEqual(expectedFile, actualFile) {
-		
+	if !reflect.DeepEqual(expectedFile, actualFile) {
+		t.Fatalf("Expected: %+v but got: %+v\n", expectedFile, actualFile)
 	}		
 }

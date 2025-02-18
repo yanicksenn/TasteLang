@@ -1,0 +1,8 @@
+
+
+- taste.lang.MyType
+  + name:string
+  + counter:int
+  + is_active:bool
+
+

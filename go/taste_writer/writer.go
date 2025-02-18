@@ -2,14 +2,14 @@ package taste_writer
 
 import (
 	"errors"
-	"text/template"
 	"os"
+	"text/template"
 
 	"github.com/yanicksenn/TasteLang/go/shared"
 )
 
 
-func Write(file *shared.File, recipe *shared.Recipe, parent string) (error) {
+func Write(file *shared.File, recipe *shared.Recipe, outputFilePath string, overrideOutputFile bool) (error) {
 	if file == nil {
 		return errors.New("file must not be nil")
 	}
@@ -23,7 +23,19 @@ func Write(file *shared.File, recipe *shared.Recipe, parent string) (error) {
 		return errors.New("Failed to parse recipe")
 	}
 
-	err = template.Execute(os.Stdout, file)
+	_, err = os.Stat(outputFilePath)
+	if err == nil {
+			if !overrideOutputFile {
+				return errors.New("Output file already exists and cannot be overridden")
+			}
+		
+			if overrideOutputFile {
+				os.Remove(outputFilePath)
+			}
+	}
+
+	outputFile, err := os.Create(outputFilePath)
+	err = template.Execute(outputFile, file)
 	if err != nil {
 		return errors.New("Failed to build recipe")
 	}

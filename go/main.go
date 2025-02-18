@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/yanicksenn/TasteLang/go/shared"
 	"github.com/yanicksenn/TasteLang/go/taste_parser"
@@ -13,50 +12,59 @@ import (
 	"github.com/yanicksenn/TasteLang/go/taste_writer"
 )
 
-var tasteFileFlag string
-var recipeFileFlag string
+var tasteFilePathFlag string
+var recipeFilePathFlag string
+var outputFilePathFlag string
+var overrideOutputFileFlag bool 
 
 func main() {
-	flag.StringVar(&tasteFileFlag, "taste", "", "Path to the taste file.")
-	flag.StringVar(&recipeFileFlag, "recipe", "", "Path to the recipe file.")
+	flag.StringVar(&tasteFilePathFlag, "taste_file_path", "", "Path to the taste file.")
+	flag.StringVar(&recipeFilePathFlag, "recipe_file_path", "", "Path to the recipe file.")
+	flag.StringVar(&outputFilePathFlag, "output_file_path", "", "Path to the output file.")
+	flag.BoolVar(&overrideOutputFileFlag, "override_output", false, "Whether the output file should be overriden if it already exists.")
 	flag.Parse()
 
-	if len(tasteFileFlag) == 0 {
-		fmt.Fprintln(os.Stderr, errors.New("Flag taste not set"))
+	if len(tasteFilePathFlag) == 0 {
+		fmt.Fprintln(os.Stderr, errors.New("Flag --taste_file_path not set"))
 		os.Exit(1)
 	}
 
-	tasteFile, err := read(tasteFileFlag)
+	tasteFile, err := read(tasteFilePathFlag)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}
 
-	if len(recipeFileFlag) == 0 {
-		fmt.Fprintln(os.Stderr, errors.New("Flag recipe not set"))
+	if len(recipeFilePathFlag) == 0 {
+		fmt.Fprintln(os.Stderr, errors.New("Flag --recipe_file_path not set"))
 		os.Exit(3)
 	}
 
-	recipeFile, err := read(recipeFileFlag)
+	recipeFile, err := read(recipeFilePathFlag)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(4)
+	}
+
+	if len(outputFilePathFlag) == 0 {
+		fmt.Fprintln(os.Stderr, errors.New("Flag --output_file_path not set"))
+		os.Exit(5)
 	}
 
 	tokens := taste_tokenizer.Tokenize(tasteFile)
 	file, err := taste_parser.Parse(tokens)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
-		os.Exit(5)
+		os.Exit(6)
 	}
 
 	recipe := shared.Recipe{
 		Content: recipeFile,
 	}
-	err = taste_writer.Write(file, &recipe, "bogus")
+	err = taste_writer.Write(file, &recipe, outputFilePathFlag, overrideOutputFileFlag)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
-		os.Exit(6)
+		os.Exit(7)
 	}
 }
 
@@ -67,16 +75,5 @@ func read(path string) (string, error) {
 	}
 
 	return string(content), nil
-}
-
-func getRecipeFileContent(cwd string) (string, error) {
-	recipeFilePath := filepath.Join(cwd, os.Args[2])
-	recipeFileBytes, err := os.ReadFile(recipeFilePath)
-	if err != nil {
-		return "", nil
-	}
-
-	return string(recipeFileBytes), nil
-
 }
 
