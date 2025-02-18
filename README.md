@@ -2,7 +2,7 @@
 
 Taste is a small tool to generate programming language agnostic data structures.
 
-NOTE: This is work in progress and does not fully work yet :)
+NOTE: There are likely better and more robust alternatives out there. However, this was fully sufficient for my personal use-case.
 
 ## Build
 
