@@ -11,12 +11,18 @@ import (
 func TestTokenize(t *testing.T) {
 	actualTokens := taste_tokenizer.Tokenize(`
 
-namespace Tokenizer.Test;
+# this is a comment
 
-type Token {
+namespace Tokenizer.Test;
+# this is another comment
+type Token { # comment
 	string value;
-	int counter;
+	# bool is_valid;
+	int counter; # comment
+    # comment line 1 
+    # comment line 2 
 }
+# comment
 	
 	`)
 
@@ -27,7 +33,7 @@ type Token {
 			IsValidIdentifier: true,
 			StartLocation: shared.Location{ 
 				X: 0, 
-				Y: 2, 
+				Y: 4, 
 			},
 		},
 		{
@@ -36,7 +42,7 @@ type Token {
 			IsValidIdentifier: true,
 			StartLocation: shared.Location{ 
 				X: 10, 
-				Y: 2, 
+				Y: 4, 
 			},
 
 		},
@@ -46,7 +52,7 @@ type Token {
 			IsValidIdentifier: false,
 			StartLocation: shared.Location{ 
 				X: 19, 
-				Y: 2, 
+				Y: 4, 
 			},
 
 		},
@@ -56,7 +62,7 @@ type Token {
 			IsValidIdentifier: true,
 			StartLocation: shared.Location{ 
 				X: 20, 
-				Y: 2, 
+				Y: 4, 
 			},
 
 		},
@@ -66,7 +72,7 @@ type Token {
 			IsValidIdentifier: false,
 			StartLocation: shared.Location{ 
 				X: 24, 
-				Y: 2, 
+				Y: 4, 
 			},
 
 		},
@@ -76,7 +82,7 @@ type Token {
 			IsValidIdentifier: true,
 			StartLocation: shared.Location{ 
 				X: 0, 
-				Y: 4, 
+				Y: 6, 
 			},
  
 		},
@@ -86,7 +92,7 @@ type Token {
 			IsValidIdentifier: true,
 			StartLocation: shared.Location{ 
 				X: 5, 
-				Y: 4, 
+				Y: 6, 
 			},
  
 		},
@@ -96,7 +102,7 @@ type Token {
 			IsValidIdentifier: false,
 			StartLocation: shared.Location{ 
 				X: 11, 
-				Y: 4, 
+				Y: 6, 
 			},
  
 		},
@@ -106,7 +112,7 @@ type Token {
 			IsValidIdentifier: true,
 			StartLocation: shared.Location{ 
 				X: 1, 
-				Y: 5, 
+				Y: 7, 
 			},
 
 		},
@@ -116,7 +122,7 @@ type Token {
 			IsValidIdentifier: true,
 			StartLocation: shared.Location{ 
 				X: 8, 
-				Y: 5, 
+				Y: 7, 
 			},
 
 		},
@@ -126,7 +132,7 @@ type Token {
 			IsValidIdentifier: false,
 			StartLocation: shared.Location{ 
 				X: 13, 
-				Y: 5, 
+				Y: 7, 
 			},
 
 		},
@@ -137,7 +143,7 @@ type Token {
 			IsValidIdentifier: true,
 			StartLocation: shared.Location{ 
 				X: 1, 
-				Y: 6, 
+				Y: 9, 
 			},
 
 		},
@@ -147,7 +153,7 @@ type Token {
 			IsValidIdentifier: true,
 			StartLocation: shared.Location{ 
 				X: 5, 
-				Y: 6, 
+				Y: 9, 
 			},
  
 		},
@@ -157,7 +163,7 @@ type Token {
 			IsValidIdentifier: false,
 			StartLocation: shared.Location{ 
 				X: 12, 
-				Y: 6, 
+				Y: 9, 
 			},
 
 		},
@@ -167,7 +173,7 @@ type Token {
 			IsValidIdentifier: false,
 			StartLocation: shared.Location{ 
 				X: 0, 
-				Y: 7, 
+				Y: 12, 
 			},
 
 		},

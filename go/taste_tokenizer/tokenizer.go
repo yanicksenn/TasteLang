@@ -19,7 +19,7 @@ func Tokenize(contentString string) ([]shared.Token) {
 		Y: y,
 	}
 
-	// is_comment := false
+	isComment := false
 
 	for i := 0; i < len(contentRunes); i++ {
 		char := contentRunes[i] 
@@ -28,7 +28,7 @@ func Tokenize(contentString string) ([]shared.Token) {
 		if unicode.IsSpace(char) {
 			// We found the end of the token. Append it to the buffer
 			// and proceed to the next one.
-			if currentToken.Len() > 0 {
+			if !isComment && currentToken.Len() > 0 {
 				tokens = append(tokens, shared.Token{
 					Token: currentToken.String(),
 					Len: currentToken.Len(),
@@ -43,8 +43,12 @@ func Tokenize(contentString string) ([]shared.Token) {
 				y ++
 				x = -1
 
-				// is_comment = false
+				isComment = false
 			}
+
+		} else if isComment {
+			continue
+
 		} else if char == '#' {
 			if currentToken.Len() > 0 {
 				tokens = append(tokens, shared.Token{
@@ -56,7 +60,7 @@ func Tokenize(contentString string) ([]shared.Token) {
 				currentToken.Reset()
 			}
 
-			// is_comment = true
+			isComment = true
 
 		} else if char == '.' {
 			if currentToken.Len() > 0 {
