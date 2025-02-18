@@ -20,8 +20,12 @@ bazel run //go:main -- \
 	--override_output
 
 ```
-# sample.taste
 
+## Files
+
+### .taste
+
+```
 namespace taste.lang;
 
 # Agnostic definition of my data.
@@ -32,11 +36,10 @@ type MyType {
 }
 ```
 
+### .recipe
+
 ```
-# sample.recipe
-
 {{ $namespace := .Namespace }}
-
 {{range .Types}}- {{ $namespace }}.{{.Name}}
 {{range .Fields}}  + {{ .Name}}:{{ .Type }}
 {{end}}
